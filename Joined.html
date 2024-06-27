@@ -1,0 +1,192 @@
+<style>
+   .slider-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    border-radius: 10px;
+    background-color: #fff;
+    /* Adjust padding or width if necessary to accommodate the partial third slide */
+}
+
+.slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 25%;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.slide img {
+    width: 100%;
+}
+
+.slide p {
+    margin-top: 0.5em;
+    font-size: 1em;
+    color: #333;
+    font-weight: bold;
+}
+
+button.prev, button.next {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 30%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 0.5rem 0.5rem;
+}
+
+.buttons { 
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .slide {
+        /* Adjust this value so that three slides fit, with the third being half-visible */
+        min-width: calc(33.333% + 15px); /* 33.333% for three slides, +15px to ensure the third is half-visible */
+    }
+
+    .slider-container {
+        /* Adjust the container to ensure it allows for the partial visibility */
+        padding-right: 15px; /* Add padding to ensure the third slide is partially visible */
+    }
+
+    button.prev, button.next {
+        display: none;
+    }
+}
+    
+    </style>
+    
+    
+    
+    
+    
+       <div class="slider-container">
+            <div class="buttons">
+                <button class="prev" onclick="slide(-1)">&#10094;</button>
+                <button class="next" onclick="slide(1)">&#10095;</button>
+            </div>    
+            <div class="slider">
+                <div class="slide">
+                    <a href="https://stoffsale.de/stoffe/musselin-stoffe/"><img src="https://stoffsale.de/media/catalog/product/cache/b062309b1a85dfa4c53e2b49eaa15ef7/0/3/03001_022_1_normaal.jpeg" alt="Foto 1"></a>
+                    <p>Musselin Stoffe</p>
+                </div>
+                <div class="slide">
+                    <a href="https://stoffsale.de/stoffe/jersey-stoffe/?product_list_order=bestsellers"><img src="https://stoffsale.de/media/catalog/product/cache/b062309b1a85dfa4c53e2b49eaa15ef7/2/1/21829_051_1_normaal_1.jpeg" alt="Foto 2"></a>
+                    <p>Jersey Stoffe</p>
+                </div>
+                <div class="slide">
+                    <a href="https://stoffsale.de/stoffe/leinen-stoffe/?product_list_order=bestsellers"><img src="https://stoffsale.de/media/catalog/product/cache/b062309b1a85dfa4c53e2b49eaa15ef7/0/2/02155_122_1_normaal.jpeg" alt="Foto 3"></a>
+                    <p>Leinen Stoffe</p>
+                </div>
+                <div class="slide">
+                    <a href="https://stoffsale.de/stoffe/baumwolle-stoffe/?product_list_order=bestsellers"><img src="https://stoffsale.de/media/catalog/product/cache/b062309b1a85dfa4c53e2b49eaa15ef7/1/8/18496_151_1_normaal.jpeg" alt="baumwollstoffe"></a>
+                    <p>Baumwollstoffe</p>
+                </div>
+                <div class="slide">
+                    <a href="https://stoffsale.de/stoffe/viskose-stoffe/?product_list_order=bestsellers"><img src="https://stoffsale.de/media/catalog/product/cache/b062309b1a85dfa4c53e2b49eaa15ef7/0/2/02194_105_1_normaal.jpeg" alt="Viskosejersey"></a>
+                    <p>Viskosestoffe</p>
+                </div>
+                <div class="slide">
+                    <a href="https://stoffsale.de/stoffe/bekleidungstoffe/sport-funktionsstoffe/?fabric_type=262&product_list_order=bestsellers"><img src="https://stoffsale.de/media/catalog/product/cache/b062309b1a85dfa4c53e2b49eaa15ef7/2/1/21682_021_1_normaal.jpeg" alt="Swimwear Stoffe"></a>
+                    <p>Swimwear Stoffe</p>
+                </div>
+            </div>
+        </div>
+    
+    <script>
+    let currentIndex = 0;
+let initialPosition = null;
+let moving = false;
+let isTouch = false; // To differentiate between touch and mouse events
+
+function slide(direction, overrideIndex = false) {
+    const slidesPerView = window.innerWidth <= 768 ? 2 : 4;
+    const totalSlides = document.querySelectorAll('.slide').length;
+
+    if (!overrideIndex) {
+        currentIndex += direction;
+    }
+
+    if (currentIndex < 0) {
+        currentIndex = totalSlides - slidesPerView;
+    } else if (currentIndex >= totalSlides - (slidesPerView - 1)) {
+        currentIndex = 0;
+    }
+
+    updateSliderPosition();
+}
+
+function updateSliderPosition() {
+    const slidesPerView = window.innerWidth <= 768 ? 2 : 4;
+    document.querySelector('.slider').style.transform = `translateX(${-currentIndex * (100 / slidesPerView)}%)`;
+}
+
+window.addEventListener('resize', updateSliderPosition);
+
+const sliderContainer = document.querySelector('.slider-container');
+
+// Unified start function for touch and mouse
+function startInteraction(startX, isTouchEvent) {
+    initialPosition = startX;
+    moving = true;
+    isTouch = isTouchEvent;
+    document.querySelector('.slider').style.transition = 'none'; // Disable transition for smooth dragging
+}
+
+// Unified move function for touch and mouse
+function moveInteraction(currentX) {
+    if (!moving) return;
+    const deltaX = currentX - initialPosition;
+    const slidesPerView = window.innerWidth <= 768 ? 2 : 4;
+    const movePercentage = deltaX / sliderContainer.offsetWidth * 100;
+    document.querySelector('.slider').style.transform = `translateX(${(-currentIndex * (100 / slidesPerView)) + movePercentage}%)`;
+}
+
+// Unified end function for touch and mouse
+function endInteraction(endX) {
+    if (!moving) return;
+    moving = false;
+    document.querySelector('.slider').style.transition = ''; // Re-enable transition
+
+    const deltaX = endX - initialPosition;
+    const slidesPerView = window.innerWidth <= 768 ? 2 : 4;
+    const totalSlides = document.querySelectorAll('.slide').length;
+    const movePercentage = deltaX / sliderContainer.offsetWidth;
+    const slidesMoved = Math.round(movePercentage * slidesPerView);
+
+    currentIndex += slidesMoved;
+    // Ensure currentIndex is within bounds
+    currentIndex = Math.max(0, Math.min(currentIndex, totalSlides - slidesPerView));
+
+    updateSliderPosition(); // Update to the new position
+}
+
+// Touch Events
+sliderContainer.addEventListener('touchstart', (e) => startInteraction(e.touches[0].clientX, true));
+sliderContainer.addEventListener('touchmove', (e) => moveInteraction(e.touches[0].clientX));
+sliderContainer.addEventListener('touchend', (e) => endInteraction(e.changedTouches[0].clientX));
+
+// Mouse Events
+sliderContainer.addEventListener('mousedown', (e) => {
+    e.preventDefault(); // Prevent default to avoid text selection
+    startInteraction(e.clientX, false);
+});
+window.addEventListener('mousemove', (e) => {
+    if (!isTouch) { // Only respond to mousemove if initiated by mousedown
+        e.preventDefault(); // Prevent default to avoid text selection
+        moveInteraction(e.clientX);
+    }
+});
+window.addEventListener('mouseup', (e) => {
+    if (!isTouch) endInteraction(e.clientX);
+});
+    </script>

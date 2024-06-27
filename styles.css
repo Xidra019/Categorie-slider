@@ -1,0 +1,78 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.slider-container {
+    width: 80%;
+    overflow: hidden;
+    position: relative;
+    border-radius: 10px;
+    background-color: #fff;
+    /* Adjust padding or width if necessary to accommodate the partial third slide */
+}
+
+.slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 25%;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.slide img {
+    width: 100%;
+}
+
+.slide p {
+    margin-top: 0.5em;
+    font-size: 1em;
+    color: #333;
+    font-weight: bold;
+}
+
+button.prev, button.next {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 1rem;
+    border-radius: 30%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    margin: 0.5rem 0.5rem;
+}
+
+.buttons { 
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .slide {
+        /* Adjust this value so that three slides fit, with the third being half-visible */
+        min-width: calc(33.333% + 15px); /* 33.333% for three slides, +15px to ensure the third is half-visible */
+    }
+
+    .slider-container {
+        /* Adjust the container to ensure it allows for the partial visibility */
+        padding-right: 15px; /* Add padding to ensure the third slide is partially visible */
+    }
+
+    button.prev, button.next {
+        display: none;
+    }
+}
